@@ -19,19 +19,36 @@ services:
       - laravel
 
   mysql:
-    image: mysql:5.7.22
+    image: mysql:latest
     container_name: mysql
     restart: unless-stopped
+    volumes:
+      - ./mysql:/var/lib/mysql
     tty: true
     ports:
       - "3306:3306"
     environment:
       MYSQL_DATABASE: homestead
-      MYSQL_USER: root
+      MYSQL_USER: homestead
       MYSQL_PASSWORD: secret
       MYSQL_ROOT_PASSWORD: secret
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
+    networks:
+      - laravel
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    depends_on:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8081:80
     networks:
       - laravel
 
