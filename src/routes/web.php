@@ -1,5 +1,8 @@
 <?php
 
+use App\Events\ExampleEvent;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +17,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('login');
+})->name('login.form')->middleware('guest');
+
+Route::get('/logout', [AuthController::class, 'logout']);
+
+Route::post('/', [AuthController::class, 'login'])->name('login');
+
+Route::get('/chat', [MessageController::class, 'chat'])->middleware('auth:web')->name('chat');
+
+Route::post('send-message', [MessageController::class, 'sendMessage']);

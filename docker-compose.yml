@@ -4,6 +4,14 @@ networks:
   laravel:
 
 services:
+  redis:
+    image: "redis:latest"
+    hostname: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - laravel
+
   nginx:
     image: nginx:stable-alpine
     container_name: nginx
